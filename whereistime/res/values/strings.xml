@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">时间都去哪了</string>
+    <string name="action_settings">Settings</string>
+    <string name="logoDesc">This is a logo</string>
+    <string name="note">注：上图是每款软件占您手机使用时间的比例。</string>
+    
+</resources>
