@@ -1,33 +1,41 @@
-package com.qiantu.whereistime.domain;
+package com.qiantu.whereistime.model;
 
 import java.io.Serializable;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import com.lidroid.xutils.db.annotation.Column;
+import com.lidroid.xutils.db.annotation.Foreign;
+import com.lidroid.xutils.db.annotation.Id;
+import com.lidroid.xutils.db.annotation.Table;
 
-@DatabaseTable
+@Table(name="appinfo")
 public class AppInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@DatabaseField(generatedId=true)
+	@Id
 	private int id;
-	/*app名称*/
-	@DatabaseField
+	@Column(column="name")
 	private String name;
 	/*使用时长*/
-	@DatabaseField
+	@Column(column="useTime")
 	private double useTime;
 	/*程序包名*/
-	@DatabaseField
+	@Column(column="pkgName")
 	private String pkgName;
-	/**
-	 * 这个记录是属于哪一天的
-	 */
-	@DatabaseField(foreign=true, foreignAutoRefresh=true)
+	@Foreign(column="day_id", foreign="id")
 	private Day day;
 	
 	
-	
+	public AppInfo() {
+		super();
+	}
+	public AppInfo(int id, String name, double useTime, String pkgName, Day day) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.useTime = useTime;
+		this.pkgName = pkgName;
+		this.day = day;
+	}
 	public int getId() {
 		return id;
 	}
@@ -58,5 +66,4 @@ public class AppInfo implements Serializable {
 	public void setDay(Day day) {
 		this.day = day;
 	}
-	
 }

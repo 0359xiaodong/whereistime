@@ -1,6 +1,5 @@
 package com.qiantu.whereistime;
 
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,6 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import android.app.ActivityManager;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -18,16 +18,19 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.IBinder;
 
-import com.j256.ormlite.android.apptools.OrmLiteBaseService;
-import com.j256.ormlite.dao.Dao;
-import com.qiantu.whereistime.domain.AppInfo;
-import com.qiantu.whereistime.domain.Day;
-import com.qiantu.whereistime.util.DBHelper;
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.db.sqlite.Selector;
+import com.lidroid.xutils.exception.DbException;
+import com.qiantu.whereistime.model.AppInfo;
+import com.qiantu.whereistime.model.Day;
+import com.qiantu.whereistime.util.DBUtilx;
 import com.qiantu.whereistime.util.RunAlways;
 
-public class BackService extends OrmLiteBaseService<DBHelper> {
-	private Dao<AppInfo, Integer> appInfoDao;
-	private Dao<Day, Integer> dayDao;
+public class BackService extends Service {
+	private DbUtils db;
+	
+//	private Dao<AppInfo, Integer> appInfoDao;
+//	private Dao<Day, Integer> dayDao;
 	private Map<String, String> appInfos;//所有已经安装的程序的信息<包名，app名>
 	private boolean flag_colseLogTimeRunnable = true;
 	
@@ -41,6 +44,8 @@ public class BackService extends OrmLiteBaseService<DBHelper> {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
+		db = DBUtilx.getInstance(this);
 		
 		this.registerReceivers();
 		
@@ -113,8 +118,8 @@ public class BackService extends OrmLiteBaseService<DBHelper> {
 
 		@Override
 		public void run() {
-			appInfoDao = getHelper().getAppInfoDao();
-			dayDao = getHelper().getDayDao();
+//			appInfoDao = getHelper().getAppInfoDao();
+//			dayDao = getHelper().getDayDao();
 			appInfos = getInstalledAppInfos();
 			
 			while(flag_colseLogTimeRunnable) {
@@ -141,14 +146,14 @@ public class BackService extends OrmLiteBaseService<DBHelper> {
 						//获取现在的日期
 						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 						String dateNow = format.format(new Date());
-						List<Day> list_day = dayDao.queryForEq("date", dateNow);
+						List<Day> list_day = db.findAll(Selector.from(Day.class).where("date", "=", dateNow));
 						
 						Day d = null;
 						//新的一天
 						if(list_day.size() == 0) {
 							d = new Day();
 							d.setDate(dateNow);
-							dayDao.create(d);
+							db.save(d);
 						} else {
 							d = list_day.get(0);
 						}
@@ -158,7 +163,10 @@ public class BackService extends OrmLiteBaseService<DBHelper> {
 						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("name", top_app_name);
 						map.put("day_id", d.getId());
-						List<AppInfo> list_appInfo = appInfoDao.queryForFieldValues(map);
+						List<AppInfo> list_appInfo = db.findAll(
+								Selector.from(AppInfo.class)
+									.where("name", "=", top_app_name)
+									.and("day_id", "=", d.getId()));
 						
 						//第一次运行的应用
 						if(list_appInfo.size() == 0) {
@@ -167,15 +175,15 @@ public class BackService extends OrmLiteBaseService<DBHelper> {
 							appInfo.setUseTime(3);//3s
 							appInfo.setPkgName(pkgName);
 							appInfo.setDay(d);
-							appInfoDao.create(appInfo);
+							db.save(appInfo);
 							
 						//已经运行过的应用，数据库中已经有记录
 						} else if(list_appInfo.size() == 1) {
 							AppInfo appInfo = list_appInfo.get(0);
 							appInfo.setUseTime(appInfo.getUseTime() + 3);
-							appInfoDao.update(appInfo);
+							db.update(appInfo);
 						}
-					} catch (SQLException e) {
+					} catch (DbException e) {
 						e.printStackTrace();
 					}
 					

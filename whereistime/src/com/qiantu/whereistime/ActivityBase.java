@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,16 +23,13 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
-import com.qiantu.whereistime.util.DBHelper;
-
 /**
  * 一个公共的Activity，包含有OrmLiteBaseActivity<DBHelper>
  * 目的是为了让每个Activity都有同一的menu
  *
  * 完全退出：这个基本activity注册了广播，收到广播则退出。然后所有的activity都继承此activity。
  */
-public class ActivityBase extends OrmLiteBaseActivity<DBHelper> {
+public class ActivityBase extends Activity {
 	private BroadcastReceiver mExitReceiver;
 	
 	TextView text_title;

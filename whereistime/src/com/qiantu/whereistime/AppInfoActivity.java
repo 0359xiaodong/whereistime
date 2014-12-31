@@ -17,7 +17,7 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.qiantu.whereistime.domain.AppInfo;
+import com.qiantu.whereistime.model.AppInfo;
 import com.qiantu.whereistime.util.AppUtil;
 
 //public class AppInfoActivity extends SuperActivity {

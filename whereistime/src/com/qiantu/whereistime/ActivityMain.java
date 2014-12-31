@@ -1,6 +1,5 @@
 package com.qiantu.whereistime;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,22 +9,20 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.stmt.PreparedQuery;
-import com.j256.ormlite.stmt.QueryBuilder;
-import com.qiantu.whereistime.domain.AppInfo;
-import com.qiantu.whereistime.domain.Day;
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.db.sqlite.Selector;
+import com.lidroid.xutils.exception.DbException;
+import com.qiantu.whereistime.model.AppInfo;
+import com.qiantu.whereistime.model.Day;
 import com.qiantu.whereistime.util.AppUtil;
+import com.qiantu.whereistime.util.DBUtilx;
 import com.qiantu.whereistime.util.StringUtil;
 
 /**
@@ -33,8 +30,7 @@ import com.qiantu.whereistime.util.StringUtil;
  *
  */
 public class ActivityMain extends ActivityBase {
-	private Dao<AppInfo, Integer> appInfoDao;
-	private Dao<Day, Integer> dayDao;
+	private DbUtils db;
 	
 	/* 一系列的广播接收器 */
 	private BroadcastReceiver mUpdateUIReceiver;//注册广播接收更新UI的命令;
@@ -43,14 +39,8 @@ public class ActivityMain extends ActivityBase {
 	private List<TextView> list_text;
 	private TextView text_date;
 	
-	/** 用来存放要切换显示的view */
-	private ViewFlipper viewFlipper;
-	/** 用于获取layout文件 */
-	private LayoutInflater layoutInflater;
-	/** viewFlipper中存放的view的数量 */
-	private int view_num = 0;
-	/** 记录当前是第几个view */
-	private int view_index = 0;
+	private LayoutInflater mInflater;
+	private PageView mPageView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,43 +48,17 @@ public class ActivityMain extends ActivityBase {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.activity_main);
 		
+		db = DBUtilx.getInstance(this);
+		
 		//初始化组件
-		initComponents();
+		mInflater = LayoutInflater.from(this);
+		mPageView = (PageView) findViewById(R.id.pageview);
 		
 		//设置titlebar的一些监听器
-		super.setTitleBar();
+//		super.setTitleBar();
 		
 		//注册一系列的广播接收器
 		initBroadcase();
-		
-		//初始化数据库
-		appInfoDao = this.getHelper().getAppInfoDao();
-		dayDao = this.getHelper().getDayDao();
-		
-		//绑定监听器，监听滑动事件
-		viewFlipper.setOnTouchListener(new GestureListener(this) {
-			@Override
-			public boolean left() {
-				if(view_index == view_num-1) {
-					Toast.makeText(ActivityMain.this, "这是第一天", Toast.LENGTH_SHORT).show();
-					return false;//如果当前的view是最后一个
-				}
-				toLeft();
-				view_index++;
-				return super.left();
-			}
-
-			@Override
-			public boolean right() {
-				if(view_index == 0) {
-					Toast.makeText(ActivityMain.this, "这是最后一天", Toast.LENGTH_SHORT).show();
-					return false;//如果当前的view是第一个
-				}
-				toRight();
-				view_index--;
-				return super.right();
-			}
-		});
 		
 		//启动service
 		Intent intent = new Intent(this, BackService.class);
@@ -140,14 +104,6 @@ public class ActivityMain extends ActivityBase {
 		this.unRegisterReceivers();
 		super.onDestroy();
 	}
-
-	/**
-	 * 初始化组件
-	 */
-	public void initComponents() {
-		layoutInflater = LayoutInflater.from(this); 
-		viewFlipper = (ViewFlipper) this.findViewById(R.id.viewFilpper);
-	}
 	
 	@Override
 	protected void onResume() {
@@ -160,9 +116,8 @@ public class ActivityMain extends ActivityBase {
 		
 		//当数据库没有数据的时候
 		if(days.isEmpty()) {
-			LinearLayout view = (LinearLayout) layoutInflater.inflate(R.layout.view, null);
-			viewFlipper.addView(view, view_num);
-			view_num++;
+			LinearLayout view = (LinearLayout) mInflater.inflate(R.layout.view, null);
+			mPageView.addPage(view);
 			Toast.makeText(this, "亲~开始浏览其它应用吧，这里会记录着~", Toast.LENGTH_LONG).show();
 			return;
 		}
@@ -181,7 +136,7 @@ public class ActivityMain extends ActivityBase {
 		
 		for(Day day : days) {
 			//设定view
-			LinearLayout view = (LinearLayout) layoutInflater.inflate(R.layout.view, null);
+			LinearLayout view = (LinearLayout) mInflater.inflate(R.layout.view, null);
 			//a代表大格，b代表中格，c代表小格，d代表最小
 			TextView text_1_a = (TextView) view.findViewById(R.id.text_1_a);
 			TextView text_2_b = (TextView) view.findViewById(R.id.text_2_b);
@@ -251,42 +206,20 @@ public class ActivityMain extends ActivityBase {
 				
 				text.setText(str);
 				text.setLongClickable(true);//这个是必须的
-				text.setOnTouchListener(new GestureListener(this) {
+				text.setOnClickListener(new OnClickListener() {
 					@Override
-					public boolean left() {
-						toLeft();
-						return super.left();
-					}
-					@Override
-					public boolean right() {
-						toRight();
-						return super.right();
-					}
-					@Override
-					public boolean onTouch(View view, MotionEvent event) {
-						if(event.getAction() == MotionEvent.ACTION_UP){  
-							view.setBackgroundResource(R.color.box_text_up_color);
-				        }   
-				        if(event.getAction() == MotionEvent.ACTION_DOWN){  
-				            view.setBackgroundResource(R.color.box_text_down_color);
-				        }  
-						return super.onTouch(view, event);
-					}
-					@Override
-					public boolean onSingleTapUp(MotionEvent e) {
+					public void onClick(View v) {
 						Intent intent = new Intent();
 						intent.setClass(ActivityMain.this, AppInfoActivity.class);
 						intent.putExtra("app", app);
 						intent.putExtra("sumTime", sumTime);
 						startActivity(intent);
-						return super.onSingleTapUp(e);
 					}
 				});
 				index++;
 			}
 			
-			viewFlipper.addView(view, view_num);
-			view_num++;
+			mPageView.addPage(view);
 		}
 		
 	}
@@ -315,16 +248,15 @@ public class ActivityMain extends ActivityBase {
 	 * @param n
 	 * @return
 	 */
-	public List<AppInfo> getAppInfos(int dayId, long n) {
+	public List<AppInfo> getAppInfos(int dayId, int n) {
 		List<AppInfo> appInfos = null;
 		try {
-			QueryBuilder<AppInfo, Integer> qb = appInfoDao.queryBuilder();
-			qb.orderBy("useTime", false);
-			qb.setWhere(qb.where().eq("day_id", dayId));
-			qb.limit(n);
-			PreparedQuery<AppInfo> pq = qb.prepare();
-			appInfos = appInfoDao.query(pq);
-		} catch (SQLException e) {
+			appInfos = db.findAll(
+					Selector.from(AppInfo.class)
+						.where("day_id", "=", dayId)
+						.orderBy("useTime", true)
+						.limit(n));
+		} catch (DbException e) {
 			e.printStackTrace();
 		}
 		return appInfos;
@@ -335,15 +267,11 @@ public class ActivityMain extends ActivityBase {
 	 * @param n
 	 * @return
 	 */
-	public List<Day> getDays(long n) {
+	public List<Day> getDays(int n) {
 		List<Day> days = null;
 		try {
-			QueryBuilder<Day, Integer> qb = dayDao.queryBuilder();
-			qb.orderBy("id", false);
-			qb.limit(n);
-			PreparedQuery<Day> pq = qb.prepare();
-			days = dayDao.query(pq);
-		} catch (SQLException e) {
+			days = db.findAll(Selector.from(Day.class).orderBy("id", true).limit(n));
+		} catch (DbException e) {
 			e.printStackTrace();
 		}
 		return days;
@@ -354,37 +282,11 @@ public class ActivityMain extends ActivityBase {
 	 */
 	public void clearDatabaseInfo() {
 		try {
-			appInfoDao.delete(appInfoDao.queryForAll());
+			db.deleteAll(AppInfo.class);
 			this.updateUI();
-		} catch (SQLException e) {
+		} catch (DbException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * 向左滑动屏幕
-	 * @return
-	 */
-	public boolean toLeft() {
-		viewFlipper.setInAnimation(AnimationUtils.loadAnimation(ActivityMain.this, 
-                R.anim.in_from_right)); 
-        viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(ActivityMain.this, 
-                R.anim.out_to_left));
-		viewFlipper.showPrevious();
-		return false;
-	}
-
-	/**
-	 * 向右滑动屏幕
-	 * @return
-	 */
-	public boolean toRight() {
-		viewFlipper.setInAnimation(AnimationUtils.loadAnimation(ActivityMain.this, 
-                R.anim.in_from_left)); 
-        viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(ActivityMain.this, 
-                R.anim.out_to_right));
-		viewFlipper.showNext();
-		return false;
 	}
 }
 

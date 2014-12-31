@@ -9,7 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
 
-public class Util {
+public class Utilx {
 	/**
 	 * 判断是否已连接网路
 	 * 需要权限：
