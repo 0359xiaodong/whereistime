@@ -5,7 +5,7 @@
     android:versionName="3.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="19" />
     
     <!-- 存储图片 -->
@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.qiantu.whereistime.MainActivity"
+            android:name="com.qiantu.whereistime.ActivityMain"
             android:label="@string/app_name"
             >
         </activity>

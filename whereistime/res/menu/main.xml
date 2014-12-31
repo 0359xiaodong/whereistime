@@ -1,9 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_main_exitsystem"
+        android:id="@+id/action_system_exit"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="退出程序"/>
+        android:title="退出"/>
 
 </menu>

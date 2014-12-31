@@ -23,7 +23,6 @@ import com.j256.ormlite.dao.Dao;
 import com.qiantu.whereistime.domain.AppInfo;
 import com.qiantu.whereistime.domain.Day;
 import com.qiantu.whereistime.util.DBHelper;
-import com.qiantu.whereistime.util.GlobleVar;
 import com.qiantu.whereistime.util.RunAlways;
 
 public class BackService extends OrmLiteBaseService<DBHelper> {
@@ -61,7 +60,7 @@ public class BackService extends OrmLiteBaseService<DBHelper> {
 		IntentFilter filter = null;
 		
 		//注册广播，用于关闭自身
-		action = GlobleVar.SYSTEM_EXIT;
+		action = getString(R.string.action_system_exit);
 		filter = new IntentFilter();
 		filter.addAction(action);
 		stopSelfReceiver = new MyReceiver(action);
@@ -220,7 +219,7 @@ public class BackService extends OrmLiteBaseService<DBHelper> {
 		}
 		@Override
 		public void onReceive(Context arg0, Intent arg1) {
-			if(action.equals(GlobleVar.SYSTEM_EXIT)) {
+			if(action.equals(getString(R.string.action_system_exit))) {
 				//注册广播，用于关闭自身
 				stopSelf();
 				

@@ -21,7 +21,7 @@ import com.qiantu.whereistime.domain.AppInfo;
 import com.qiantu.whereistime.util.AppUtil;
 
 //public class AppInfoActivity extends SuperActivity {
-public class AppInfoActivity extends SuperActivity {//这里继承SuperActivity，点击菜单的退出，并没有退出，原因未明
+public class AppInfoActivity extends ActivityBase {//这里继承SuperActivity，点击菜单的退出，并没有退出，原因未明
 	private LinearLayout layout_appicon;
 	private TextView text_appname;
 	private TextView text_usetime;

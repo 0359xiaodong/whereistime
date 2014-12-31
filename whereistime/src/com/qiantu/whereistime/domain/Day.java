@@ -33,8 +33,6 @@ public class Day implements Serializable {
 	@ForeignCollectionField
 	private ForeignCollection<AppInfo> appInfos;
 	
-	
-	
 	public Day() {
 		super();
 	}

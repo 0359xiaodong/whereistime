@@ -26,20 +26,19 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.qiantu.whereistime.domain.AppInfo;
 import com.qiantu.whereistime.domain.Day;
 import com.qiantu.whereistime.util.AppUtil;
-import com.qiantu.whereistime.util.GlobleVar;
 import com.qiantu.whereistime.util.StringUtil;
 
 /**
  * @author LinZhiquan
  *
  */
-public class MainActivity extends SuperActivity {
+public class ActivityMain extends ActivityBase {
 	private Dao<AppInfo, Integer> appInfoDao;
 	private Dao<Day, Integer> dayDao;
 	
 	/* 一系列的广播接收器 */
-	private MyReceiver updateUIReceiver;//注册广播接收更新UI的命令;
-	private MyReceiver clearDatabaseReceiver;//注册广播删除数据库数据
+	private BroadcastReceiver mUpdateUIReceiver;//注册广播接收更新UI的命令;
+	private BroadcastReceiver clearDatabaseReceiver;//注册广播删除数据库数据
 	
 	private List<TextView> list_text;
 	private TextView text_date;
@@ -59,17 +58,14 @@ public class MainActivity extends SuperActivity {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.activity_main);
 		
-		//分享
-//		ShareSDK.initSDK(this);
-		
 		//初始化组件
-		this.initComponents();
+		initComponents();
 		
 		//设置titlebar的一些监听器
 		super.setTitleBar();
 		
 		//注册一系列的广播接收器
-		this.registerReceivers();
+		initBroadcase();
 		
 		//初始化数据库
 		appInfoDao = this.getHelper().getAppInfoDao();
@@ -80,7 +76,7 @@ public class MainActivity extends SuperActivity {
 			@Override
 			public boolean left() {
 				if(view_index == view_num-1) {
-					Toast.makeText(MainActivity.this, "这是第一天", Toast.LENGTH_SHORT).show();
+					Toast.makeText(ActivityMain.this, "这是第一天", Toast.LENGTH_SHORT).show();
 					return false;//如果当前的view是最后一个
 				}
 				toLeft();
@@ -91,7 +87,7 @@ public class MainActivity extends SuperActivity {
 			@Override
 			public boolean right() {
 				if(view_index == 0) {
-					Toast.makeText(MainActivity.this, "这是最后一天", Toast.LENGTH_SHORT).show();
+					Toast.makeText(ActivityMain.this, "这是最后一天", Toast.LENGTH_SHORT).show();
 					return false;//如果当前的view是第一个
 				}
 				toRight();
@@ -108,33 +104,39 @@ public class MainActivity extends SuperActivity {
 	/**
 	 * 注册一系列的广播接收器
 	 */
-	public void registerReceivers() {
-		IntentFilter filter = null;
-		String action = null;
-		
+	public void initBroadcase() {
 		//注册广播接收更新UI的命令
-		action = GlobleVar.UPDATE_UI;
-		filter = new IntentFilter();
-		filter.addAction(action);
-		updateUIReceiver = new MyReceiver(action);
-		this.registerReceiver(updateUIReceiver, filter);
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(getString(R.string.action_update_ui));
+		mUpdateUIReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				//注册广播接收更新UI的命令
+				updateUI();
+			}
+		};
+		this.registerReceiver(mUpdateUIReceiver, filter);
 		
 		//注册广播接收清除数据库信息的命令
-		action = GlobleVar.CLEAR_DATABASE_INFO;
 		filter = new IntentFilter();
-		filter.addAction(action);
-		clearDatabaseReceiver = new MyReceiver(action);
+		filter.addAction(getString(R.string.action_clean_dbinfo));
+		clearDatabaseReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				//注册广播接收清除数据库信息的命令
+				clearDatabaseInfo();
+			}
+		};
 		this.registerReceiver(clearDatabaseReceiver, filter);
 	}
 
 	public void unRegisterReceivers() {
-		this.unregisterReceiver(updateUIReceiver);
+		this.unregisterReceiver(mUpdateUIReceiver);
 		this.unregisterReceiver(clearDatabaseReceiver);
 	}
 	
 	@Override
 	protected void onDestroy() {
-//		ShareSDK.stopSDK(this);
 		this.unRegisterReceivers();
 		super.onDestroy();
 	}
@@ -273,7 +275,7 @@ public class MainActivity extends SuperActivity {
 					@Override
 					public boolean onSingleTapUp(MotionEvent e) {
 						Intent intent = new Intent();
-						intent.setClass(MainActivity.this, AppInfoActivity.class);
+						intent.setClass(ActivityMain.this, AppInfoActivity.class);
 						intent.putExtra("app", app);
 						intent.putExtra("sumTime", sumTime);
 						startActivity(intent);
@@ -301,7 +303,7 @@ public class MainActivity extends SuperActivity {
 		@Override
 		public void onClick(View v) {
 			Intent intent = new Intent();
-			intent.setClass(MainActivity.this, AppInfoActivity.class);
+			intent.setClass(ActivityMain.this, AppInfoActivity.class);
 			intent.putExtra("app", app);
 			startActivity(intent);
 		}
@@ -358,33 +360,15 @@ public class MainActivity extends SuperActivity {
 			e.printStackTrace();
 		}
 	}
-
-	class MyReceiver extends BroadcastReceiver {
-		private String action;
-		public MyReceiver(String action) {
-			super();
-			this.action = action;
-		}
-		@Override
-		public void onReceive(Context arg0, Intent arg1) {
-			if(action.equals(GlobleVar.UPDATE_UI)) {
-				//注册广播接收更新UI的命令
-				updateUI();
-			} else if(action.equals(GlobleVar.CLEAR_DATABASE_INFO)) {
-				//注册广播接收清除数据库信息的命令
-				clearDatabaseInfo();
-			}
-		}
-	}
 	
 	/**
 	 * 向左滑动屏幕
 	 * @return
 	 */
 	public boolean toLeft() {
-		viewFlipper.setInAnimation(AnimationUtils.loadAnimation(MainActivity.this, 
+		viewFlipper.setInAnimation(AnimationUtils.loadAnimation(ActivityMain.this, 
                 R.anim.in_from_right)); 
-        viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(MainActivity.this, 
+        viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(ActivityMain.this, 
                 R.anim.out_to_left));
 		viewFlipper.showPrevious();
 		return false;
@@ -395,9 +379,9 @@ public class MainActivity extends SuperActivity {
 	 * @return
 	 */
 	public boolean toRight() {
-		viewFlipper.setInAnimation(AnimationUtils.loadAnimation(MainActivity.this, 
+		viewFlipper.setInAnimation(AnimationUtils.loadAnimation(ActivityMain.this, 
                 R.anim.in_from_left)); 
-        viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(MainActivity.this, 
+        viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(ActivityMain.this, 
                 R.anim.out_to_right));
 		viewFlipper.showNext();
 		return false;

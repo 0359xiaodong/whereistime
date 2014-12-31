@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.qiantu.whereistime.util.AppUtil;
 
-public class LogoActivity extends SuperActivity {
+public class LogoActivity extends ActivityBase {
 	private Activity act;
 
 	@Override
@@ -28,7 +28,7 @@ public class LogoActivity extends SuperActivity {
 	
 	private void startMainActivity() {
 		Intent intent = new Intent();
-		intent.setClass(this, MainActivity.class);
+		intent.setClass(this, ActivityMain.class);
 		startActivity(intent);
 		finish();
 	}

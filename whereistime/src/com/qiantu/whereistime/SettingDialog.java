@@ -11,8 +11,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.qiantu.whereistime.util.GlobleVar;
-
 public class SettingDialog extends Activity {
 	private Button dialog_setting_exitsystem;
 	private Button dialog_setting_cleardata;
@@ -50,7 +48,7 @@ public class SettingDialog extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();
-				intent.setAction(GlobleVar.SYSTEM_EXIT);
+				intent.setAction(getString(R.string.action_system_exit));
 				sendBroadcast(intent);
 				finish();
 			}
@@ -68,7 +66,7 @@ public class SettingDialog extends Activity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							Intent intent = new Intent();
-							intent.setAction(GlobleVar.CLEAR_DATABASE_INFO);
+							intent.setAction(getString(R.string.action_clean_dbinfo));
 							sendBroadcast(intent);
 							finish();
 						}

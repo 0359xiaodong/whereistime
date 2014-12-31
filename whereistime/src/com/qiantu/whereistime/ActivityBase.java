@@ -24,16 +24,15 @@ import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
 import com.qiantu.whereistime.util.DBHelper;
-import com.qiantu.whereistime.util.GlobleVar;
 
 /**
  * 一个公共的Activity，包含有OrmLiteBaseActivity<DBHelper>
  * 目的是为了让每个Activity都有同一的menu
- * @author LinZhiquan
  *
+ * 完全退出：这个基本activity注册了广播，收到广播则退出。然后所有的activity都继承此activity。
  */
-public class SuperActivity extends OrmLiteBaseActivity<DBHelper> {
-	private MyReceiver receiver;
+public class ActivityBase extends OrmLiteBaseActivity<DBHelper> {
+	private BroadcastReceiver mExitReceiver;
 	
 	TextView text_title;
 	LinearLayout layout_share;
@@ -44,14 +43,24 @@ public class SuperActivity extends OrmLiteBaseActivity<DBHelper> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		initBroadcase();
+	}
+	
+	private void initBroadcase() {
 		//注册广播，用于退出程序
 		IntentFilter filter = new IntentFilter();
-		filter.addAction(GlobleVar.SYSTEM_EXIT);
-		receiver = new MyReceiver();
-		this.registerReceiver(receiver, filter);
+		filter.addAction(getString(R.string.action_system_exit));
+		mExitReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				finish();
+			}
+		};
+		this.registerReceiver(mExitReceiver, filter);
 	}
 	
 	/**
+	 * protected:只有同一个包下的类才能访问
 	 * 只能让子类执行此方法，因为子类才会有下面的那些id
 	 */
 	protected void setTitleBar() {
@@ -95,7 +104,7 @@ public class SuperActivity extends OrmLiteBaseActivity<DBHelper> {
 				
 				Intent intent = new Intent();
 				intent.putExtra("imagePath", file.getPath());
-				intent.setClass(SuperActivity.this, ShareDialog.class);
+				intent.setClass(ActivityBase.this, ShareDialog.class);
 				startActivity(intent);
 			}
 		});
@@ -105,7 +114,7 @@ public class SuperActivity extends OrmLiteBaseActivity<DBHelper> {
 			@Override
 			public void onClick(View arg0) {
 				Intent intent = new Intent();
-				intent.setClass(SuperActivity.this, SettingDialog.class);
+				intent.setClass(ActivityBase.this, SettingDialog.class);
 				startActivity(intent);
 			}
 		});
@@ -113,15 +122,8 @@ public class SuperActivity extends OrmLiteBaseActivity<DBHelper> {
 	
 	@Override
 	protected void onDestroy() {
-		this.unregisterReceiver(receiver);
+		this.unregisterReceiver(mExitReceiver);
 		super.onDestroy();
-	}
-	
-	class MyReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			finish();
-		}
 	}
 	
 	@Override
@@ -129,13 +131,13 @@ public class SuperActivity extends OrmLiteBaseActivity<DBHelper> {
 		getMenuInflater().inflate(R.menu.main, menu);
         return true;
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == R.id.menu_main_exitsystem) {
+		if(item.getItemId() == R.id.action_system_exit) {
 			//发送广播，停止service
 			Intent intent = new Intent();
-			intent.setAction(GlobleVar.SYSTEM_EXIT);
+			intent.setAction(getString(R.string.action_system_exit));
 			this.sendBroadcast(intent);
 		}
 		return true;

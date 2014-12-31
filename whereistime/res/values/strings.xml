@@ -6,4 +6,8 @@
     <string name="logoDesc">This is a logo</string>
     <string name="note">注：上图是每款软件占您手机使用时间的比例。</string>
     
+    <!-- 广播action -->
+    <string name="action_system_exit">com.qiantu.whereistime.system_exit</string>
+    <string name="action_update_ui">com.qiantu.whereistime.update_ui</string>
+    <string name="action_clean_dbinfo">com.qiantu.whereistime.clean_dbinfo</string>
 </resources>
