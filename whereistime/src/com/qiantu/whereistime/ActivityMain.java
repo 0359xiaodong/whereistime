@@ -63,6 +63,8 @@ public class ActivityMain extends ActivityBase {
 		//启动service
 		Intent intent = new Intent(this, BackService.class);
 		this.startService(intent);
+		
+		updateUI();
 	}
 	
 	/**
@@ -105,11 +107,11 @@ public class ActivityMain extends ActivityBase {
 		super.onDestroy();
 	}
 	
-	@Override
-	protected void onResume() {
-		this.updateUI();
-		super.onResume();
-	}
+//	@Override
+//	protected void onResume() {
+//		this.updateUI();
+//		super.onResume();
+//	}
 
 	public void updateUI() {
 		List<Day> days = this.getDays(10);
