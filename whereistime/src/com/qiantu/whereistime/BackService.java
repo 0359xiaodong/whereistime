@@ -29,8 +29,6 @@ import com.qiantu.whereistime.util.RunAlways;
 public class BackService extends Service {
 	private DbUtils db;
 	
-//	private Dao<AppInfo, Integer> appInfoDao;
-//	private Dao<Day, Integer> dayDao;
 	private Map<String, String> appInfos;//所有已经安装的程序的信息<包名，app名>
 	private boolean flag_colseLogTimeRunnable = true;
 	
