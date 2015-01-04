@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.lidroid.xutils.DbUtils;
 import com.lidroid.xutils.DbUtils.DbUpgradeListener;
+import com.lidroid.xutils.exception.DbException;
+import com.qiantu.whereistime.model.AppInfo;
+import com.qiantu.whereistime.model.Day;
 
 public class DBUtilx {
 	private static DbUtils instance;
@@ -15,6 +18,12 @@ public class DBUtilx {
 		synchronized (DBUtilx.class) {
 			if(instance == null) {
 				instance = DbUtils.create(context, "whereistime", 2, new MyDbUpdateListener());
+				try {
+					instance.createTableIfNotExist(Day.class);
+					instance.createTableIfNotExist(AppInfo.class);
+				} catch (DbException e) {
+					e.printStackTrace();
+				}
 			}
 			return instance;
 		}

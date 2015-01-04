@@ -118,8 +118,6 @@ public class BackService extends Service {
 
 		@Override
 		public void run() {
-//			appInfoDao = getHelper().getAppInfoDao();
-//			dayDao = getHelper().getDayDao();
 			appInfos = getInstalledAppInfos();
 			
 			while(flag_colseLogTimeRunnable) {
@@ -146,6 +144,7 @@ public class BackService extends Service {
 						//获取现在的日期
 						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 						String dateNow = format.format(new Date());
+						
 						List<Day> list_day = db.findAll(Selector.from(Day.class).where("date", "=", dateNow));
 						
 						Day d = null;
@@ -153,16 +152,11 @@ public class BackService extends Service {
 						if(list_day.size() == 0) {
 							d = new Day();
 							d.setDate(dateNow);
-							db.save(d);
 						} else {
 							d = list_day.get(0);
 						}
 						
-//						List<AppInfo> list_appInfo = appInfoDao.queryForEq("name", top_app_name);
 						//查询 同一天是否打开过同一个应用
-						Map<String, Object> map = new HashMap<String, Object>();
-						map.put("name", top_app_name);
-						map.put("day_id", d.getId());
 						List<AppInfo> list_appInfo = db.findAll(
 								Selector.from(AppInfo.class)
 									.where("name", "=", top_app_name)

@@ -110,12 +110,6 @@ public class ActivityMain extends ActivityBase {
 		this.unRegisterReceivers();
 		super.onDestroy();
 	}
-	
-//	@Override
-//	protected void onResume() {
-//		this.updateUI();
-//		super.onResume();
-//	}
 
 	public void updateUI() {
 		mPageView.removeAllPages();
@@ -123,7 +117,7 @@ public class ActivityMain extends ActivityBase {
 		List<Day> days = this.getDays(10);
 		
 		//当数据库没有数据的时候
-		if(days.isEmpty()) {
+		if(days.size() == 0) {
 			LinearLayout view = (LinearLayout) mInflater.inflate(R.layout.view, null);
 			mPageView.addPage(view);
 			Toast.makeText(this, "亲~开始浏览其它应用吧，这里会记录着~", Toast.LENGTH_LONG).show();
