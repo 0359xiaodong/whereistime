@@ -55,7 +55,7 @@ public class ActivityMain extends ActivityBase {
 		mPageView = (PageView) findViewById(R.id.pageview);
 		
 		//设置titlebar的一些监听器
-//		super.setTitleBar();
+		super.setTitleBar();
 		
 		//注册一系列的广播接收器
 		initBroadcase();
@@ -63,8 +63,12 @@ public class ActivityMain extends ActivityBase {
 		//启动service
 		Intent intent = new Intent(this, BackService.class);
 		this.startService(intent);
-		
+	}
+	
+	@Override
+	protected void onResume() {
 		updateUI();
+		super.onResume();
 	}
 	
 	/**
@@ -114,6 +118,8 @@ public class ActivityMain extends ActivityBase {
 //	}
 
 	public void updateUI() {
+		mPageView.removeAllPages();
+		
 		List<Day> days = this.getDays(10);
 		
 		//当数据库没有数据的时候

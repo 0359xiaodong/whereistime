@@ -68,6 +68,15 @@ public class PageView extends HorizontalScrollView {
 	}
 	
 	/**
+	 * 移除所有的页面
+	 */
+	public void removeAllPages() {
+		if(mPageCount > 0) {
+			mContainer.removeAllViews();
+		}
+	}
+	
+	/**
 	 * 获取页面数量
 	 * @return
 	 */

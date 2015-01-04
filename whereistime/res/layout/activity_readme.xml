@@ -27,11 +27,7 @@
 	        android:text="立即开启" 
 	        android:background="#669966"
 	        />
-		
-		<!-- <include layout="@layout/title_bar"/> -->
-		
 	</RelativeLayout>
-    
 </FrameLayout>
 
 
