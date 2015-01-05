@@ -1,4 +1,4 @@
-package com.qiantu.whereistime;
+package com.miquan.activity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import com.qiantu.whereistime.R;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -29,7 +31,7 @@ import android.widget.TextView;
  *
  * 完全退出：这个基本activity注册了广播，收到广播则退出。然后所有的activity都继承此activity。
  */
-public class ActivityBase extends Activity {
+public class BaseActivity extends Activity {
 	private BroadcastReceiver mExitReceiver;
 	
 	TextView text_title;
@@ -102,7 +104,7 @@ public class ActivityBase extends Activity {
 				
 				Intent intent = new Intent();
 				intent.putExtra("imagePath", file.getPath());
-				intent.setClass(ActivityBase.this, ShareDialog.class);
+				intent.setClass(BaseActivity.this, ShareDialog.class);
 				startActivity(intent);
 			}
 		});
@@ -112,7 +114,7 @@ public class ActivityBase extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				Intent intent = new Intent();
-				intent.setClass(ActivityBase.this, SettingDialog.class);
+				intent.setClass(BaseActivity.this, SettingDialog.class);
 				startActivity(intent);
 			}
 		});

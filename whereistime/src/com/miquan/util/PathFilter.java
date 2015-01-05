@@ -1,4 +1,4 @@
-package com.qiantu.whereistime.util;
+package com.miquan.util;
 
 /**
  * 监听某个目录的文件变化。

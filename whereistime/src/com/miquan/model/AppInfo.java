@@ -1,4 +1,4 @@
-package com.qiantu.whereistime.model;
+package com.miquan.model;
 
 import java.io.Serializable;
 

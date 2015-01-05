@@ -1,7 +1,8 @@
-package com.qiantu.whereistime;
+package com.miquan.activity;
 
 import java.io.File;
 
+import com.qiantu.whereistime.R;
 import com.tencent.connect.share.QQShare;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;

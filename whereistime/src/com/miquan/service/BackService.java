@@ -1,4 +1,4 @@
-package com.qiantu.whereistime;
+package com.miquan.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,10 +21,11 @@ import android.os.IBinder;
 import com.lidroid.xutils.DbUtils;
 import com.lidroid.xutils.db.sqlite.Selector;
 import com.lidroid.xutils.exception.DbException;
-import com.qiantu.whereistime.model.AppInfo;
-import com.qiantu.whereistime.model.Day;
-import com.qiantu.whereistime.util.DBUtilx;
-import com.qiantu.whereistime.util.RunAlways;
+import com.miquan.model.AppInfo;
+import com.miquan.model.Day;
+import com.miquan.util.DBUtilx;
+import com.miquan.util.RunAlways;
+import com.qiantu.whereistime.R;
 
 public class BackService extends BaseService {
 	private DbUtils db;

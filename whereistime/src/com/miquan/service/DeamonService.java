@@ -1,4 +1,4 @@
-package com.qiantu.whereistime.service;
+package com.miquan.service;
 
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
@@ -8,8 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 
-import com.qiantu.whereistime.BaseService;
-import com.qiantu.whereistime.util.x;
+import com.miquan.util.x;
 
 /**
  * 守护服务。

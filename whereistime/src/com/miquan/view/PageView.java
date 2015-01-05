@@ -1,4 +1,4 @@
-package com.qiantu.whereistime;
+package com.miquan.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

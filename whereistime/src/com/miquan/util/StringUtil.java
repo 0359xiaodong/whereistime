@@ -1,4 +1,4 @@
-package com.qiantu.whereistime.util;
+package com.miquan.util;
 
 public class StringUtil {
 	/**	把一个double类型的数字转换为保留4个字符的字符串

@@ -1,4 +1,4 @@
-package com.qiantu.whereistime.util;
+package com.miquan.util;
 
 
 public class AppUtil {

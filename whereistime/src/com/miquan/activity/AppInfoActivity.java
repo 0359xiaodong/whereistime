@@ -1,4 +1,4 @@
-package com.qiantu.whereistime;
+package com.miquan.activity;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -17,11 +17,12 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.qiantu.whereistime.model.AppInfo;
-import com.qiantu.whereistime.util.AppUtil;
+import com.miquan.model.AppInfo;
+import com.miquan.util.AppUtil;
+import com.qiantu.whereistime.R;
 
-//public class AppInfoActivity extends SuperActivity {
-public class ActivityAppInfo extends ActivityBase {//这里继承SuperActivity，点击菜单的退出，并没有退出，原因未明
+//这里继承SuperActivity，点击菜单的退出，并没有退出，原因未明
+public class AppInfoActivity extends BaseActivity {
 	private LinearLayout layout_appicon;
 	private TextView text_appname;
 	private TextView text_usetime;
@@ -98,7 +99,7 @@ public class ActivityAppInfo extends ActivityBase {//这里继承SuperActivity�
 		}
 		@Override
 		public void onClick(View v) {
-			new AlertDialog.Builder(ActivityAppInfo.this)
+			new AlertDialog.Builder(AppInfoActivity.this)
 				.setMessage(str)
 				.setPositiveButton("关闭", null)
 				.show();

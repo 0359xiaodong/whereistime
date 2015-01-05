@@ -1,4 +1,4 @@
-package com.qiantu.whereistime;
+package com.miquan.activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,19 +19,22 @@ import android.widget.Toast;
 import com.lidroid.xutils.DbUtils;
 import com.lidroid.xutils.db.sqlite.Selector;
 import com.lidroid.xutils.exception.DbException;
-import com.qiantu.whereistime.model.AppInfo;
-import com.qiantu.whereistime.model.Day;
-import com.qiantu.whereistime.service.DeamonService;
-import com.qiantu.whereistime.util.AppUtil;
-import com.qiantu.whereistime.util.DBUtilx;
-import com.qiantu.whereistime.util.StringUtil;
-import com.qiantu.whereistime.util.Utilx;
+import com.miquan.model.AppInfo;
+import com.miquan.model.Day;
+import com.miquan.service.BackService;
+import com.miquan.service.DeamonService;
+import com.miquan.util.AppUtil;
+import com.miquan.util.DBUtilx;
+import com.miquan.util.StringUtil;
+import com.miquan.util.Utilx;
+import com.miquan.view.PageView;
+import com.qiantu.whereistime.R;
 
 /**
  * @author LinZhiquan
  *
  */
-public class ActivityMain extends ActivityBase {
+public class MainActivity extends BaseActivity {
 	private DbUtils db;
 	
 	/* 一系列的广播接收器 */
@@ -67,7 +70,7 @@ public class ActivityMain extends ActivityBase {
 		
 		// 判断是不是第一次打开
 		if (Utilx.isFirstOpenApp(this)) {
-			startActivity(new Intent(this, ActivityReadme.class));
+			startActivity(new Intent(this, ReadmeActivity.class));
 		}
 	}
 	
@@ -218,7 +221,7 @@ public class ActivityMain extends ActivityBase {
 					@Override
 					public void onClick(View v) {
 						Intent intent = new Intent();
-						intent.setClass(ActivityMain.this, ActivityAppInfo.class);
+						intent.setClass(MainActivity.this, AppInfoActivity.class);
 						intent.putExtra("app", app);
 						intent.putExtra("sumTime", sumTime);
 						startActivity(intent);
@@ -244,7 +247,7 @@ public class ActivityMain extends ActivityBase {
 		@Override
 		public void onClick(View v) {
 			Intent intent = new Intent();
-			intent.setClass(ActivityMain.this, ActivityAppInfo.class);
+			intent.setClass(MainActivity.this, AppInfoActivity.class);
 			intent.putExtra("app", app);
 			startActivity(intent);
 		}

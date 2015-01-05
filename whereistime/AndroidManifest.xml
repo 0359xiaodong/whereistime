@@ -30,23 +30,23 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.qiantu.whereistime.ActivityMain"
+            android:name="com.miquan.activity.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.qiantu.whereistime.ActivityAppInfo"></activity>
-        <activity android:name="com.qiantu.whereistime.SettingDialog"
+        <activity android:name="com.miquan.activity.AppInfoActivity"></activity>
+        <activity android:name="com.miquan.activity.SettingDialog"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             >
         </activity>
-        <activity android:name="com.qiantu.whereistime.ShareDialog"
+        <activity android:name="com.miquan.activity.ShareDialog"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             >
         </activity>
-        <activity android:name="com.qiantu.whereistime.ActivityReadme"
+        <activity android:name="com.miquan.activity.ReadmeActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             >
         </activity>
@@ -74,7 +74,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:screenOrientation="portrait" />
 	 	
-        <service android:name="com.qiantu.whereistime.BackService"
+        <service android:name="com.miquan.service.BackService"
             ></service>
     </application>
 

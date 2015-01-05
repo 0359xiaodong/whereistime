@@ -1,4 +1,4 @@
-package com.qiantu.whereistime.util;
+package com.miquan.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

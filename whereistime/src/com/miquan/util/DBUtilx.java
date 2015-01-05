@@ -1,12 +1,12 @@
-package com.qiantu.whereistime.util;
+package com.miquan.util;
 
 import android.content.Context;
 
 import com.lidroid.xutils.DbUtils;
 import com.lidroid.xutils.DbUtils.DbUpgradeListener;
 import com.lidroid.xutils.exception.DbException;
-import com.qiantu.whereistime.model.AppInfo;
-import com.qiantu.whereistime.model.Day;
+import com.miquan.model.AppInfo;
+import com.miquan.model.Day;
 
 public class DBUtilx {
 	private static DbUtils instance;

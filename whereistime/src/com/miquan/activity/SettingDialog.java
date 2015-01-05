@@ -1,4 +1,6 @@
-package com.qiantu.whereistime;
+package com.miquan.activity;
+
+import com.qiantu.whereistime.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;

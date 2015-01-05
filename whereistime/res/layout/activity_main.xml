@@ -8,7 +8,7 @@
 	<include layout="@layout/title_bar"/>
 	
     <!-- pageview里面必须有LinearLayout，这个写死了。 -->
-	<com.qiantu.whereistime.PageView 
+	<com.miquan.view.PageView 
 	    android:id="@+id/pageview"
 	    android:layout_width="wrap_content"  
 	    android:layout_height="fill_parent"  
@@ -18,7 +18,7 @@
 		        android:layout_height="fill_parent"  
 		        android:orientation="horizontal" >
 		    </LinearLayout>
-	</com.qiantu.whereistime.PageView> 
+	</com.miquan.view.PageView> 
 </LinearLayout>
 
 

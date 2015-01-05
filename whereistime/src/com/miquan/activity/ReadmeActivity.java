@@ -1,4 +1,7 @@
-package com.qiantu.whereistime;
+package com.miquan.activity;
+
+import com.miquan.view.PageView;
+import com.qiantu.whereistime.R;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,7 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ActivityReadme extends Activity {
+public class ReadmeActivity extends Activity {
 	private LayoutInflater mInflater;
 	private PageView mPageView;
 	

@@ -1,4 +1,6 @@
-package com.qiantu.whereistime;
+package com.miquan.service;
+
+import com.qiantu.whereistime.R;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
