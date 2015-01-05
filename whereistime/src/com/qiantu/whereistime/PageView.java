@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
+/**
+ * 具体看博客：http://blog.csdn.net/qiantujava/article/details/42392127
+ */
 public class PageView extends HorizontalScrollView {
 	private int mBaseScrollX;//滑动基线。也就是点击并滑动之前的x值，以此值计算相对滑动距离。
 	private int mScreenWidth;
@@ -16,7 +19,9 @@ public class PageView extends HorizontalScrollView {
 	private LinearLayout mContainer;
 	private boolean flag;
 	private int mPageCount;//页面数量
-
+	
+	private int mScrollX = 200;//滑动多长距离翻页
+	
 	public PageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
@@ -107,7 +112,7 @@ public class PageView extends HorizontalScrollView {
 		case MotionEvent.ACTION_UP:
 			int scrollX = getBaseScrollX();
 			//左滑，大于一半，移到下一页
-			if (scrollX > mScreenWidth/2) {
+			if (scrollX > mScrollX) {
 				baseSmoothScrollTo(mScreenWidth);
 				mBaseScrollX += mScreenWidth;
 			} 
@@ -116,7 +121,7 @@ public class PageView extends HorizontalScrollView {
 				baseSmoothScrollTo(0);
 			} 
 			//右滑，不到一半，返回原位
-			else if(scrollX > -mScreenWidth/2) {
+			else if(scrollX > -mScrollX) {
 				baseSmoothScrollTo(0);
 			} 
 			//右滑，大于一半，移到下一页
