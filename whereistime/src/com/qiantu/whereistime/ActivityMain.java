@@ -21,9 +21,11 @@ import com.lidroid.xutils.db.sqlite.Selector;
 import com.lidroid.xutils.exception.DbException;
 import com.qiantu.whereistime.model.AppInfo;
 import com.qiantu.whereistime.model.Day;
+import com.qiantu.whereistime.service.DeamonService;
 import com.qiantu.whereistime.util.AppUtil;
 import com.qiantu.whereistime.util.DBUtilx;
 import com.qiantu.whereistime.util.StringUtil;
+import com.qiantu.whereistime.util.Utilx;
 
 /**
  * @author LinZhiquan
@@ -60,9 +62,13 @@ public class ActivityMain extends ActivityBase {
 		//注册一系列的广播接收器
 		initBroadcase();
 		
-		//启动service
-		Intent intent = new Intent(this, BackService.class);
-		this.startService(intent);
+		startService(new Intent(this, DeamonService.class));
+		startService(new Intent(this, BackService.class));
+		
+		// 判断是不是第一次打开
+		if (Utilx.isFirstOpenApp(this)) {
+			startActivity(new Intent(this, ActivityReadme.class));
+		}
 	}
 	
 	@Override
@@ -212,7 +218,7 @@ public class ActivityMain extends ActivityBase {
 					@Override
 					public void onClick(View v) {
 						Intent intent = new Intent();
-						intent.setClass(ActivityMain.this, AppInfoActivity.class);
+						intent.setClass(ActivityMain.this, ActivityAppInfo.class);
 						intent.putExtra("app", app);
 						intent.putExtra("sumTime", sumTime);
 						startActivity(intent);
@@ -238,7 +244,7 @@ public class ActivityMain extends ActivityBase {
 		@Override
 		public void onClick(View v) {
 			Intent intent = new Intent();
-			intent.setClass(ActivityMain.this, AppInfoActivity.class);
+			intent.setClass(ActivityMain.this, ActivityAppInfo.class);
 			intent.putExtra("app", app);
 			startActivity(intent);
 		}

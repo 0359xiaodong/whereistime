@@ -26,7 +26,7 @@ import com.qiantu.whereistime.model.Day;
 import com.qiantu.whereistime.util.DBUtilx;
 import com.qiantu.whereistime.util.RunAlways;
 
-public class BackService extends Service {
+public class BackService extends BaseService {
 	private DbUtils db;
 	
 	private Map<String, String> appInfos;//所有已经安装的程序的信息<包名，app名>

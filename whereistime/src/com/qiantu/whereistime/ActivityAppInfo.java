@@ -21,7 +21,7 @@ import com.qiantu.whereistime.model.AppInfo;
 import com.qiantu.whereistime.util.AppUtil;
 
 //public class AppInfoActivity extends SuperActivity {
-public class AppInfoActivity extends ActivityBase {//这里继承SuperActivity，点击菜单的退出，并没有退出，原因未明
+public class ActivityAppInfo extends ActivityBase {//这里继承SuperActivity，点击菜单的退出，并没有退出，原因未明
 	private LinearLayout layout_appicon;
 	private TextView text_appname;
 	private TextView text_usetime;
@@ -98,7 +98,7 @@ public class AppInfoActivity extends ActivityBase {//这里继承SuperActivity�
 		}
 		@Override
 		public void onClick(View v) {
-			new AlertDialog.Builder(AppInfoActivity.this)
+			new AlertDialog.Builder(ActivityAppInfo.this)
 				.setMessage(str)
 				.setPositiveButton("关闭", null)
 				.show();

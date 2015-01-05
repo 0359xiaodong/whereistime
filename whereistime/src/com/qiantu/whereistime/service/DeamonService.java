@@ -1,15 +1,15 @@
 package com.qiantu.whereistime.service;
 
-import com.qiantu.whereistime.util.x;
-
 import android.app.ActivityManager;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+
+import com.qiantu.whereistime.BaseService;
+import com.qiantu.whereistime.util.x;
 
 /**
  * 守护服务。
@@ -21,7 +21,7 @@ import android.os.IBinder;
  * 
  * 注意：要加入权限 <uses-permission android:name="android.permission.GET_TASKS"/>
  */
-public class DeamonService extends Service implements Runnable {
+public class DeamonService extends BaseService implements Runnable {
 	private final String ACTION = "com.miquan.deamonService.notSelf";
 	private final int DELAY = 3000;//每隔多少秒检查一次当前运行的程序
 	private final int RUN = 1000;//如果不是当前程序，则运行多少秒

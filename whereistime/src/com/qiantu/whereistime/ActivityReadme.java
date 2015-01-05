@@ -1,7 +1,6 @@
 package com.qiantu.whereistime;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ReadmeActivity extends Activity {
+public class ActivityReadme extends Activity {
 	private LayoutInflater mInflater;
 	private PageView mPageView;
 	
@@ -38,11 +37,6 @@ public class ReadmeActivity extends Activity {
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				SharedPreferences sp = getSharedPreferences("isReadme", Activity.MODE_PRIVATE);
-				SharedPreferences.Editor editor = sp.edit();
-				editor.putBoolean("isReadme", true);
-				editor.commit();
-				
 				finish();
 			}
 		});

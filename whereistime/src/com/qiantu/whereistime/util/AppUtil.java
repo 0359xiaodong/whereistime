@@ -1,8 +1,5 @@
 package com.qiantu.whereistime.util;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
 
 public class AppUtil {
 	/**
