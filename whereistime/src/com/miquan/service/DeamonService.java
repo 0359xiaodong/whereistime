@@ -2,7 +2,6 @@ package com.miquan.service;
 
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -22,33 +21,33 @@ import com.miquan.util.x;
  */
 public class DeamonService extends BaseService implements Runnable {
 	private final String ACTION = "com.miquan.deamonService.notSelf";
+	
 	private final int DELAY = 3000;//每隔多少秒检查一次当前运行的程序
 	private final int RUN = 1000;//如果不是当前程序，则运行多少秒
 	
-	private Context context;
-	private ActivityManager am;
-	private BroadcastReceiver myReceiver;
-	private Intent intent;
+	private ActivityManager mActManager;
+	private BroadcastReceiver mReceiver;
+	private Intent mIntent;
 	
 	private boolean flag = true;
 
 	@Override
 	public void onCreate() {
-		context = this;
-		am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-		intent = new Intent(ACTION);
+		super.onCreate();
+		
+		mActManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+		mIntent = new Intent(ACTION);
 		
 		initBroadcast();
 		startThread();
 	}
 	
 	private void initBroadcast() {
-		//定义广播接收器：每当收到广播，停止一秒
-		myReceiver = new BroadcastReceiver() {
+		//定义广播接收器：每当收到广播，运行一秒
+		mReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				try {
-					x.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx("运行1秒中");
 					Thread.sleep(RUN);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -59,12 +58,14 @@ public class DeamonService extends BaseService implements Runnable {
 		// 注册广播接收器，当当前运行的程序不是自身，则让service运行一下
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(ACTION);
-		context.registerReceiver(myReceiver, filter);
+		registerReceiver(mReceiver, filter);
 	}
 	
 	@Override
 	public void onDestroy() {
+		super.onDestroy();
 		closeThread();
+		x.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx("deamon_service_exit");
 	}
 
 	@Override
@@ -85,10 +86,10 @@ public class DeamonService extends BaseService implements Runnable {
 	 */
 	public void closeThread() {
 		// 记得取消广播注册，和关闭线程
-		if(myReceiver != null) {
-			context.unregisterReceiver(myReceiver);
+		if(mReceiver != null) {
+			unregisterReceiver(mReceiver);
 		}
-		this.flag = false;
+		flag = false;
 	}
 
 	@Override
@@ -96,17 +97,14 @@ public class DeamonService extends BaseService implements Runnable {
 		while (flag) {
 			try {
 				Thread.sleep(DELAY);
-				x.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx("正在检查中");
 
 				// 获取当前运行的Activity
-				ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
-				String pkgName = cn.getPackageName();
+				String pkgName = mActManager.getRunningAppProcesses().get(0).processName;
 
-				if (!pkgName.equals(context.getPackageName())) {
-					x.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx("不是当前app");
-					sendBroadcast(intent);
+				if (!pkgName.equals(getPackageName())) {
+					sendBroadcast(mIntent);
+					continue;
 				}
-				x.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx("yes");
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

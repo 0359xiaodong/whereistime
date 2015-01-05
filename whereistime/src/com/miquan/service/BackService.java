@@ -8,7 +8,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import android.app.ActivityManager;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,6 +24,7 @@ import com.miquan.model.AppInfo;
 import com.miquan.model.Day;
 import com.miquan.util.DBUtilx;
 import com.miquan.util.RunAlways;
+import com.miquan.util.x;
 import com.qiantu.whereistime.R;
 
 public class BackService extends BaseService {
@@ -34,7 +34,6 @@ public class BackService extends BaseService {
 	private boolean flag_colseLogTimeRunnable = true;
 	
 	/* 一系列的receiver */
-	private MyReceiver stopSelfReceiver;//用于关闭自身
 	private MyReceiver stopThreadReceiver;//用于锁屏的时候关闭线程
 	private MyReceiver startThreadReceiver;//用于当屏幕从锁屏状态到打开状态是，启动线程
 	
@@ -43,10 +42,11 @@ public class BackService extends BaseService {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		x.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx("back service");
 		
 		db = DBUtilx.getInstance(this);
 		
-		this.registerReceivers();
+		registerReceivers();
 		
 		//开启线程，在后台记录各个程序的使用时间
 		new Thread(new LogTimeRunnable()).start();
@@ -62,13 +62,6 @@ public class BackService extends BaseService {
 	public void registerReceivers() {
 		String action = null;
 		IntentFilter filter = null;
-		
-		//注册广播，用于关闭自身
-		action = getString(R.string.action_system_exit);
-		filter = new IntentFilter();
-		filter.addAction(action);
-		stopSelfReceiver = new MyReceiver(action);
-		this.registerReceiver(stopSelfReceiver, filter);
 		
 		//注册广播，锁屏的时候关闭线程
 		action = Intent.ACTION_SCREEN_OFF;
@@ -89,7 +82,6 @@ public class BackService extends BaseService {
 	 * 注销一系列的广播接收
 	 */
 	public void unRegisterReceivers() {
-		this.unregisterReceiver(stopSelfReceiver);
 		this.unregisterReceiver(stopThreadReceiver);
 		this.unregisterReceiver(startThreadReceiver);
 	}
@@ -99,7 +91,9 @@ public class BackService extends BaseService {
 		flag_colseLogTimeRunnable = false;//关闭线程
 		//最后在onDestory中close就行
 		runAlways.close();
-		this.unRegisterReceivers();//注销广播接收
+		unRegisterReceivers();//注销广播接收
+		
+		x.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx("back_service_exit");
 		super.onDestroy();
 	}
 

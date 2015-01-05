@@ -14,16 +14,6 @@ public class BaseService extends Service {
 	
 	@Override
 	public void onCreate() {
-		initBroadcase();
-		super.onCreate();
-	}
-	
-	@Override
-	public IBinder onBind(Intent intent) {
-		return null;
-	}
-	
-	private void initBroadcase() {
 		//注册广播，用于退出程序
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(getString(R.string.action_system_exit));
@@ -33,7 +23,14 @@ public class BaseService extends Service {
 				stopSelf();
 			}
 		};
-		this.registerReceiver(mExitReceiver, filter);
+		registerReceiver(mExitReceiver, filter);
+		
+		super.onCreate();
+	}
+	
+	@Override
+	public IBinder onBind(Intent intent) {
+		return null;
 	}
 	
 	@Override

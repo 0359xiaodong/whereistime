@@ -27,6 +27,7 @@ import com.miquan.util.AppUtil;
 import com.miquan.util.DBUtilx;
 import com.miquan.util.StringUtil;
 import com.miquan.util.Utilx;
+import com.miquan.util.x;
 import com.miquan.view.PageView;
 import com.qiantu.whereistime.R;
 
@@ -116,7 +117,8 @@ public class MainActivity extends BaseActivity {
 	
 	@Override
 	protected void onDestroy() {
-		this.unRegisterReceivers();
+		unRegisterReceivers();
+		x.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx("main_activity_exit");
 		super.onDestroy();
 	}
 

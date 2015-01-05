@@ -19,9 +19,9 @@ import android.widget.TextView;
 
 import com.miquan.model.AppInfo;
 import com.miquan.util.AppUtil;
+import com.miquan.util.x;
 import com.qiantu.whereistime.R;
 
-//这里继承SuperActivity，点击菜单的退出，并没有退出，原因未明
 public class AppInfoActivity extends BaseActivity {
 	private LinearLayout layout_appicon;
 	private TextView text_appname;
@@ -104,6 +104,12 @@ public class AppInfoActivity extends BaseActivity {
 				.setPositiveButton("关闭", null)
 				.show();
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		x.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx("appinfo_activity_exit");
+		super.onDestroy();
 	}
 }
 
