@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 
 import com.miquan.util.x;
+import com.qiantu.whereistime.R;
 
 /**
  * 守护服务。
@@ -20,8 +21,6 @@ import com.miquan.util.x;
  * 注意：要加入权限 <uses-permission android:name="android.permission.GET_TASKS"/>
  */
 public class DeamonService extends BaseService implements Runnable {
-	private final String ACTION = "com.miquan.deamonService.notSelf";
-	
 	private final int DELAY = 3000;//每隔多少秒检查一次当前运行的程序
 	private final int RUN = 1000;//如果不是当前程序，则运行多少秒
 	
@@ -36,7 +35,7 @@ public class DeamonService extends BaseService implements Runnable {
 		super.onCreate();
 		
 		mActManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-		mIntent = new Intent(ACTION);
+		mIntent = new Intent(getString(R.string.action_deamon_service));
 		
 		initBroadcast();
 		startThread();
@@ -57,7 +56,7 @@ public class DeamonService extends BaseService implements Runnable {
 		
 		// 注册广播接收器，当当前运行的程序不是自身，则让service运行一下
 		IntentFilter filter = new IntentFilter();
-		filter.addAction(ACTION);
+		filter.addAction(getString(R.string.action_deamon_service));
 		registerReceiver(mReceiver, filter);
 	}
 	
