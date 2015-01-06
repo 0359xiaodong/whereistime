@@ -16,7 +16,7 @@ public class BaseService extends Service {
 	public void onCreate() {
 		//注册广播，用于退出程序
 		IntentFilter filter = new IntentFilter();
-		filter.addAction(getString(R.string.action_system_exit));
+		filter.addAction(getString(R.string.action_exit));
 		mExitReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {

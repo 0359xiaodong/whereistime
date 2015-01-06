@@ -50,7 +50,7 @@ public class SettingDialog extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();
-				intent.setAction(getString(R.string.action_system_exit));
+				intent.setAction(getString(R.string.action_exit));
 				sendBroadcast(intent);
 				finish();
 			}

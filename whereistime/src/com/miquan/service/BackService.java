@@ -214,7 +214,7 @@ public class BackService extends BaseService {
 		}
 		@Override
 		public void onReceive(Context arg0, Intent arg1) {
-			if(action.equals(getString(R.string.action_system_exit))) {
+			if(action.equals(getString(R.string.action_exit))) {
 				//注册广播，用于关闭自身
 				stopSelf();
 				

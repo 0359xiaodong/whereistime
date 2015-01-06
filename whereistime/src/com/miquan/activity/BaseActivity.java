@@ -49,7 +49,7 @@ public class BaseActivity extends Activity {
 	private void initBroadcase() {
 		//注册广播，用于退出程序
 		IntentFilter filter = new IntentFilter();
-		filter.addAction(getString(R.string.action_system_exit));
+		filter.addAction(getString(R.string.action_exit));
 		mExitReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
@@ -134,10 +134,10 @@ public class BaseActivity extends Activity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == R.id.action_system_exit) {
+		if(item.getItemId() == R.id.menu_exit) {
 			//发送广播，停止service
 			Intent intent = new Intent();
-			intent.setAction(getString(R.string.action_system_exit));
+			intent.setAction(getString(R.string.action_exit));
 			this.sendBroadcast(intent);
 		}
 		return true;
