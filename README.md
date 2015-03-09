@@ -1,5 +1,8 @@
 whereistime
-===========
+============================================
+最新Github地址：https://github.com/qiantumiquan/WhereIsTime-AndroidStudio
+————开发工具由Eclipse改成了Android Studio。
+============================================
 
 时间都去哪了----一个已上线的项目。
 
